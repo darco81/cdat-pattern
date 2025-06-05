@@ -33,7 +33,12 @@ yarn-error.log*
 # Environment
 .env
 .env.local
+.env.stage
+.env.prod
 .env.*.local
+
+# Authentication
+.auth/
 
 # Coverage
 coverage/

@@ -1,0 +1,37 @@
+{
+  "name": "cdat-pattern-crm-erp-examples",
+  "version": "1.0.0",
+  "description": "CRM/ERP examples for CDAT Pattern - production-ready test patterns",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:user-management": "playwright test features/user-management",
+    "test:data-grid": "playwright test features/data-grid",
+    "test:dashboard": "playwright test features/dashboard",
+    "test:entity-crud": "playwright test features/entity-crud",
+    "show-report": "playwright show-report",
+    "install-browsers": "playwright install"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "cdat-pattern",
+    "crm",
+    "erp",
+    "e2e-testing",
+    "test-automation"
+  ],
+  "author": "CDAT Pattern Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.0.0",
+    "@cdat/utils": "workspace:*"
+  }
+}

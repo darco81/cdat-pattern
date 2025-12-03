@@ -1,0 +1,182 @@
+{
+  "CDAT Components Class": {
+    "prefix": "cdat-components",
+    "body": [
+      "import type { Page, Locator } from '@playwright/test';",
+      "",
+      "/**",
+      " * ${1:Feature} Components",
+      " * @description Locators and selectors for ${1:Feature} feature",
+      " */",
+      "export class ${1:Feature}Components {",
+      "  readonly ${2:element}: Locator;",
+      "",
+      "  constructor(private readonly page: Page) {",
+      "    this.${2:element} = page.locator('${3:selector}');",
+      "  }",
+      "}"
+    ],
+    "description": "Create CDAT Components class"
+  },
+
+  "CDAT Data File": {
+    "prefix": "cdat-data",
+    "body": [
+      "/**",
+      " * ${1:Feature} Data",
+      " * @description Types and test data for ${1:Feature} feature",
+      " */",
+      "",
+      "// Interfaces",
+      "export interface ${1:Feature}Data {",
+      "  ${2:field}: ${3:string};",
+      "}",
+      "",
+      "// Enums",
+      "export enum ${1:Feature}State {",
+      "  ${4:Active} = '${4:Active}',",
+      "}",
+      "",
+      "// Test Data",
+      "export const VALID_${1/(.*)/${1:/upcase}/}_DATA: ${1:Feature}Data = {",
+      "  ${2:field}: '${5:value}',",
+      "};",
+      "",
+      "// URLs",
+      "export const ${1/(.*)/${1:/upcase}/}_URLS = {",
+      "  main: '/${1/(.*)/${1:/downcase}/}',",
+      "} as const;"
+    ],
+    "description": "Create CDAT Data file"
+  },
+
+  "CDAT Actions Class": {
+    "prefix": "cdat-actions",
+    "body": [
+      "import type { Page } from '@playwright/test';",
+      "import { Cdat } from '../utils/Cdat';",
+      "import { ${1:Feature}Components } from './components';",
+      "import type { ${1:Feature}Data } from './data';",
+      "",
+      "/**",
+      " * ${1:Feature} Actions",
+      " * @description Business logic for ${1:Feature} feature",
+      " */",
+      "export class ${1:Feature}Actions {",
+      "  private readonly components: ${1:Feature}Components;",
+      "",
+      "  constructor(private readonly page: Page) {",
+      "    this.components = new ${1:Feature}Components(page);",
+      "  }",
+      "",
+      "  /**",
+      "   * ${2:Description of action}",
+      "   */",
+      "  async ${3:actionName}(data: ${1:Feature}Data): Promise<void> {",
+      "    await Cdat.waitAndClick(this.components.${4:element});",
+      "  }",
+      "}"
+    ],
+    "description": "Create CDAT Actions class"
+  },
+
+  "CDAT Test File": {
+    "prefix": "cdat-test",
+    "body": [
+      "import { test, expect } from '@playwright/test';",
+      "import { ${1:Feature}Actions } from './actions';",
+      "import { ${1:Feature}Components } from './components';",
+      "import { VALID_${1/(.*)/${1:/upcase}/}_DATA, ${1/(.*)/${1:/upcase}/}_URLS } from './data';",
+      "",
+      "test.describe('${1:Feature} Feature', () => {",
+      "  let actions: ${1:Feature}Actions;",
+      "  let components: ${1:Feature}Components;",
+      "",
+      "  test.beforeEach(async ({ page }) => {",
+      "    actions = new ${1:Feature}Actions(page);",
+      "    components = new ${1:Feature}Components(page);",
+      "    await page.goto(${1/(.*)/${1:/upcase}/}_URLS.main);",
+      "  });",
+      "",
+      "  test('TC_001: Given ${2:condition}, When ${3:action}, Then ${4:result}', async ({",
+      "    page,",
+      "  }) => {",
+      "    // Arrange",
+      "    const data = VALID_${1/(.*)/${1:/upcase}/}_DATA;",
+      "",
+      "    // Act",
+      "    await actions.${5:actionName}(data);",
+      "",
+      "    // Assert",
+      "    await expect(page).toHaveURL(/${6:expected}/);",
+      "  });",
+      "});"
+    ],
+    "description": "Create CDAT Test file"
+  },
+
+  "CDAT Test Case": {
+    "prefix": "cdat-tc",
+    "body": [
+      "test('TC_${1:001}: Given ${2:condition}, When ${3:action}, Then ${4:result}', async ({",
+      "  page,",
+      "}) => {",
+      "  // Arrange",
+      "  ${5}",
+      "",
+      "  // Act",
+      "  ${6}",
+      "",
+      "  // Assert",
+      "  ${7}",
+      "});"
+    ],
+    "description": "Create CDAT test case"
+  },
+
+  "CDAT Smart Wait Click": {
+    "prefix": "cdat-click",
+    "body": "await Cdat.waitAndClick(this.components.${1:element});",
+    "description": "CDAT Pattern smart wait and click"
+  },
+
+  "CDAT Smart Wait Fill": {
+    "prefix": "cdat-fill",
+    "body": "await Cdat.waitAndFill(this.components.${1:element}, ${2:value});",
+    "description": "CDAT Pattern smart wait and fill"
+  },
+
+  "CDAT Smart Wait State": {
+    "prefix": "cdat-state",
+    "body": "await Cdat.waitForState(this.components.${1:element}, LocatorState.${2|Visible,Hidden,Attached,Detached|});",
+    "description": "CDAT Pattern smart wait for state"
+  },
+
+  "CDAT Check State": {
+    "prefix": "cdat-check",
+    "body": "const ${1:isVisible} = await Cdat.checkState(this.components.${2:element}, LocatorState.${3|Visible,Hidden,Attached,Detached|});",
+    "description": "CDAT Pattern check element state"
+  },
+
+  "CDAT Get Text": {
+    "prefix": "cdat-text",
+    "body": "const ${1:text} = await Cdat.waitForText(this.components.${2:element});",
+    "description": "CDAT Pattern smart wait for text"
+  },
+
+  "CDAT Locator": {
+    "prefix": "cdat-locator",
+    "body": "readonly ${1:name}: Locator = this.page.locator('${2:selector}');",
+    "description": "Create readonly locator"
+  },
+
+  "CDAT Interface": {
+    "prefix": "cdat-interface",
+    "body": [
+      "export interface ${1:Name} {",
+      "  ${2:field}: ${3:string};",
+      "}"
+    ],
+    "description": "Create interface"
+  }
+}

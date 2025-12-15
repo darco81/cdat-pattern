@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 500">
+  <defs>
+    <style>
+      .box { stroke-width: 2; rx: 8; }
+      .box-c { fill: #e3f2fd; stroke: #1976d2; }
+      .box-d { fill: #fff3e0; stroke: #f57c00; }
+      .box-a { fill: #f3e5f5; stroke: #7b1fa2; }
+      .box-t { fill: #e8f5e9; stroke: #388e3c; }
+      .title { font-family: system-ui, sans-serif; font-size: 18px; font-weight: bold; }
+      .subtitle { font-family: system-ui, sans-serif; font-size: 12px; fill: #666; }
+      .label { font-family: system-ui, sans-serif; font-size: 11px; fill: #444; }
+      .arrow { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .layer-label { font-family: system-ui, sans-serif; font-size: 10px; fill: #999; font-style: italic; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="500" fill="#fafafa"/>
+
+  <!-- Layer 1: Independent -->
+  <rect x="20" y="60" width="560" height="130" rx="12" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <text x="40" y="85" class="layer-label">Independent Layers (No Dependencies)</text>
+
+  <!-- Components Box -->
+  <rect x="50" y="100" width="220" height="70" class="box box-c"/>
+  <text x="160" y="130" class="title" text-anchor="middle">Components</text>
+  <text x="160" y="150" class="subtitle" text-anchor="middle">Locators &amp; Selectors</text>
+
+  <!-- Data Box -->
+  <rect x="330" y="100" width="220" height="70" class="box box-d"/>
+  <text x="440" y="130" class="title" text-anchor="middle">Data</text>
+  <text x="440" y="150" class="subtitle" text-anchor="middle">Types &amp; Test Data</text>
+
+  <!-- Layer 2: Actions -->
+  <rect x="20" y="210" width="560" height="100" rx="12" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <text x="40" y="235" class="layer-label">Dependent on Components + Data</text>
+
+  <!-- Actions Box -->
+  <rect x="150" y="250" width="300" height="70" class="box box-a"/>
+  <text x="300" y="280" class="title" text-anchor="middle">Actions</text>
+  <text x="300" y="300" class="subtitle" text-anchor="middle">Business Logic (No Assertions)</text>
+
+  <!-- Layer 3: Tests -->
+  <rect x="20" y="330" width="560" height="100" rx="12" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  <text x="40" y="355" class="layer-label">Dependent on All Layers</text>
+
+  <!-- Tests Box -->
+  <rect x="150" y="370" width="300" height="70" class="box box-t"/>
+  <text x="300" y="400" class="title" text-anchor="middle">Tests</text>
+  <text x="300" y="420" class="subtitle" text-anchor="middle">Scenarios &amp; Assertions</text>
+
+  <!-- Arrows from Components -->
+  <path class="arrow" d="M160 170 L160 200 L220 200 L220 250"/>
+
+  <!-- Arrows from Data -->
+  <path class="arrow" d="M440 170 L440 200 L380 200 L380 250"/>
+
+  <!-- Arrow from Actions to Tests -->
+  <path class="arrow" d="M300 320 L300 370"/>
+
+  <!-- Direct arrows to Tests (Components and Data) -->
+  <path class="arrow" d="M100 170 L100 345 L150 345 L150 405 L150 405" stroke-dasharray="4"/>
+  <path class="arrow" d="M500 170 L500 345 L450 345 L450 405 L450 405" stroke-dasharray="4"/>
+
+  <!-- Title -->
+  <text x="300" y="35" class="title" text-anchor="middle" font-size="22">CDAT Pattern Architecture</text>
+
+  <!-- Legend -->
+  <text x="300" y="475" class="label" text-anchor="middle">Solid arrows: Primary flow | Dashed arrows: Direct access for assertions</text>
+</svg>

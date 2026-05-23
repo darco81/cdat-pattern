@@ -2,7 +2,14 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for CDAT Basic Example
+ *
+ * Guardian Pattern Implementation:
+ * - health-check project runs first (pre-flight validation)
+ * - Feature test projects depend on health-check passing
+ * - This ensures environment issues are caught before feature tests run
+ *
  * @see https://playwright.dev/docs/test-configuration
+ * @see https://playwright.dev/docs/test-projects#dependencies
  */
 export default defineConfig({
   testDir: './features',
@@ -43,18 +50,35 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Pre-flight health check (Guardian pattern)
     {
-      name: 'chromium',
+      name: 'health-check',
+      testDir: './features/_health',
+      use: { ...devices['Desktop Chrome'] },
+    },
+
+    // Feature tests depend on health checks
+    {
+      name: 'chromium-features',
+      testDir: './features',
+      testIgnore: './features/_health/**',
+      dependencies: ['health-check'], // Runs after health check passes
       use: { ...devices['Desktop Chrome'] },
     },
 
     {
-      name: 'firefox',
+      name: 'firefox-features',
+      testDir: './features',
+      testIgnore: './features/_health/**',
+      dependencies: ['health-check'], // Runs after health check passes
       use: { ...devices['Desktop Firefox'] },
     },
 
     {
-      name: 'webkit',
+      name: 'webkit-features',
+      testDir: './features',
+      testIgnore: './features/_health/**',
+      dependencies: ['health-check'], // Runs after health check passes
       use: { ...devices['Desktop Safari'] },
     },
   ],

@@ -277,6 +277,7 @@ const isVisible = await Cdat.checkState(element, LocatorState.Visible);
 | Waits | Scattered timeouts | Centralized smart waits |
 | Type safety | Often `any` | Strict typing |
 | Reusability | Copy-paste | Composition |
+| Cross-cutting concerns | Ad-hoc/mixed | Guardian modules |
 
 ---
 
@@ -299,6 +300,7 @@ CDAT pattern has been battle-tested across **18 months** and **9 production impl
 
 - [Architecture](docs/ARCHITECTURE.md) - Detailed layer breakdown
 - [Zero Rules](docs/ZERO-RULES.md) - The three zero rules explained
+- [Cross-Cutting Guardians](docs/CROSS-CUTTING-GUARDIANS.md) - Environment health, i18n, accessibility
 - [Composition](docs/COMPOSITION.md) - Selector & method composition
 - [Smart Waits](docs/SMART-WAITS.md) - Cdat utility reference
 - [Migration Guide](docs/MIGRATION-GUIDE.md) - From classic POM

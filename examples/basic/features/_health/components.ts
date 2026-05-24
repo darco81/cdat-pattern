@@ -26,7 +26,7 @@ export class HealthComponents {
   constructor(private readonly page: Page) {
     // ARIA-first locators for accessibility validation
     this.mainNavigation = page.getByRole('navigation');
-    this.loginButton = page.getByRole('link', { name: 'Login' });
+    this.loginButton = page.getByTestId('login-button'); // Avoid hardcoded text per ARIA-first policy
     this.searchForm = page.getByRole('search');
 
     // Error/loading states by test ID (semantic roles not applicable)

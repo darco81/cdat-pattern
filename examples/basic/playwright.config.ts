@@ -13,7 +13,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './features',
-  testMatch: '**/*.test.ts',
+  testMatch: '**/test.ts', // Match Guardian pattern: components.ts, data.ts, actions.ts, test.ts
 
   /* Run tests in files in parallel */
   fullyParallel: true,

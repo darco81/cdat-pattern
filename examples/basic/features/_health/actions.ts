@@ -249,16 +249,14 @@ export class HealthActions {
     const healthyCount = Object.values(checks).filter(Boolean).length;
     const totalChecks = Object.keys(checks).length;
 
+    // Determine health status using early return pattern (Zero-else rule)
     let status: HealthCheckResult['status'];
+
     if (healthyCount === totalChecks) {
       status = 'healthy';
-    }
-
-    if (healthyCount < totalChecks && healthyCount >= totalChecks / 2) {
+    } else if (healthyCount >= totalChecks / 2) {
       status = 'degraded';
-    }
-
-    if (healthyCount < totalChecks / 2) {
+    } else {
       status = 'unhealthy';
     }
 
@@ -268,7 +266,7 @@ export class HealthActions {
     if (!checks.accessibility) details.push(HEALTH_ERROR_MESSAGES.A11Y_MISSING_ROLE);
 
     return {
-      status: status!,
+      status, // Safe - always assigned
       checks,
       details,
       timestamp: Date.now()

@@ -27,17 +27,15 @@ test.describe('Environment Health (Pre-flight)', () => {
     const isBackendHealthy = await healthActions.checkBackendHealth();
 
     // Assert: All critical routes should return healthy responses
-    expect(isBackendHealthy).toBe(true);
-
-    // Additional detail for debugging failures
+    // Get detailed results for comprehensive failure context
     if (!isBackendHealthy) {
       const detailedResults = await healthActions.getDetailedBackendHealth();
       const failedRoutes = detailedResults.filter(r => !r.isHealthy);
+      const failureDetails = failedRoutes.map(r => `${r.route} (${r.status}, ${r.responseTime}ms)`).join(', ');
 
-      console.log('Failed routes:', failedRoutes);
-      expect(isBackendHealthy,
-        `Backend unhealthy: ${failedRoutes.map(r => `${r.route} (${r.status}, ${r.responseTime}ms)`).join(', ')}`
-      ).toBe(true);
+      expect(isBackendHealthy, `Backend unhealthy: ${failureDetails}`).toBe(true);
+    } else {
+      expect(isBackendHealthy).toBe(true);
     }
   });
 
@@ -49,23 +47,21 @@ test.describe('Environment Health (Pre-flight)', () => {
     const isI18nHealthy = await healthActions.checkI18nHealth();
 
     // Assert: No raw translation keys should be visible
-    expect(isI18nHealthy).toBe(true);
-
-    // Additional detail for debugging failures
+    // Get detailed results for comprehensive failure context
     if (!isI18nHealthy) {
       const i18nDetails = await healthActions.getDetailedI18nHealth();
+      const issues: string[] = [];
 
       if (i18nDetails.hasRawKeys) {
-        expect(isI18nHealthy,
-          `i18n unhealthy: ${i18nDetails.rawKeyCount} raw translation keys visible`
-        ).toBe(true);
+        issues.push(`${i18nDetails.rawKeyCount} raw translation keys visible`);
+      }
+      if (!i18nDetails.validTranslations) {
+        issues.push('critical translations are invalid or missing');
       }
 
-      if (!i18nDetails.validTranslations) {
-        expect(isI18nHealthy,
-          'i18n unhealthy: critical translations are invalid or missing'
-        ).toBe(true);
-      }
+      expect(isI18nHealthy, `i18n unhealthy: ${issues.join(', ')}`).toBe(true);
+    } else {
+      expect(isI18nHealthy).toBe(true);
     }
   });
 
@@ -77,17 +73,15 @@ test.describe('Environment Health (Pre-flight)', () => {
     const isA11yHealthy = await healthActions.checkAccessibilityHealth();
 
     // Assert: All critical elements should be accessible
-    expect(isA11yHealthy).toBe(true);
-
-    // Additional detail for debugging failures
+    // Get detailed results for comprehensive failure context
     if (!isA11yHealthy) {
       const a11yDetails = await healthActions.getDetailedA11yHealth();
       const invalidElements = a11yDetails.filter(e => !e.isValid);
+      const failureDetails = invalidElements.map(e => e.element).join(', ');
 
-      console.log('A11y failures:', invalidElements);
-      expect(isA11yHealthy,
-        `A11y unhealthy: ${invalidElements.map(e => e.element).join(', ')} missing required accessibility attributes`
-      ).toBe(true);
+      expect(isA11yHealthy, `A11y unhealthy: ${failureDetails} missing required accessibility attributes`).toBe(true);
+    } else {
+      expect(isA11yHealthy).toBe(true);
     }
   });
 
@@ -106,12 +100,10 @@ test.describe('Environment Health (Pre-flight)', () => {
     // Assert: No failure details should be present for healthy environment
     expect(healthReport.details).toHaveLength(0);
 
-    // Additional debugging for partial failures
+    // Provide detailed failure context if not healthy
     if (healthReport.status !== 'healthy') {
-      console.log('Health report details:', healthReport.details);
-      expect(healthReport.status,
-        `Environment health check failed: ${healthReport.details.join(', ')}`
-      ).toBe('healthy');
+      const failureContext = `Environment health check failed: ${healthReport.details.join(', ')}`;
+      expect(healthReport.status, failureContext).toBe('healthy');
     }
   });
 
@@ -153,8 +145,8 @@ test.describe('Environment Health (Pre-flight)', () => {
   });
 
   test('TC_HEALTH_PERF: Page load performance meets thresholds', async ({ page }) => {
-    // Arrange: Track navigation timing
-    const startTime = Date.now();
+    // Arrange: Track navigation timing with high precision
+    const startTime = performance.now();
 
     // Act: Navigate to homepage with timeout
     await page.goto('/', {
@@ -162,15 +154,13 @@ test.describe('Environment Health (Pre-flight)', () => {
       timeout: HEALTH_THRESHOLDS.maxLoadingTime
     });
 
-    const loadTime = Date.now() - startTime;
+    const loadTime = performance.now() - startTime;
 
     // Assert: Page should load within acceptable timeframe
-    expect(loadTime).toBeLessThan(HEALTH_THRESHOLDS.maxLoadingTime);
-
     if (loadTime >= HEALTH_THRESHOLDS.maxLoadingTime) {
-      expect(loadTime,
-        `Page load took ${loadTime}ms, exceeds threshold of ${HEALTH_THRESHOLDS.maxLoadingTime}ms`
-      ).toBeLessThan(HEALTH_THRESHOLDS.maxLoadingTime);
+      expect(loadTime, `Page load took ${loadTime.toFixed(2)}ms, exceeds threshold of ${HEALTH_THRESHOLDS.maxLoadingTime}ms`).toBeLessThan(HEALTH_THRESHOLDS.maxLoadingTime);
+    } else {
+      expect(loadTime).toBeLessThan(HEALTH_THRESHOLDS.maxLoadingTime);
     }
   });
 });

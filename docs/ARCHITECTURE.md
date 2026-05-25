@@ -307,6 +307,92 @@ export class CheckoutActions {
 
 ---
 
+## Cross-Cutting Guardians
+
+Beyond feature-specific tests, real applications need **cross-cutting concerns** validation:
+
+```mermaid
+flowchart TD
+    subgraph Guardian["Guardian Module (_health)"]
+        GC[Guardian Components<br/>Health Check Locators]
+        GD[Guardian Data<br/>Expected States & Thresholds]
+        GA[Guardian Actions<br/>Health Check Logic]
+        GT[Guardian Tests<br/>Pre-flight Validation]
+    end
+    
+    subgraph Features["Feature Modules"]
+        F1[Login Feature]
+        F2[Cart Feature] 
+        F3[Checkout Feature]
+    end
+    
+    GT -.->|"dependency"| F1
+    GT -.->|"dependency"| F2
+    GT -.->|"dependency"| F3
+    
+    GC --> GA
+    GD --> GA
+    GA --> GT
+    
+    style Guardian fill:#fff8e1
+    style GT fill:#ffab00,color:#000
+```
+
+### Guardian Responsibilities
+
+| Concern | What It Validates | Example Checks |
+|---------|-------------------|----------------|
+| **Environment Health** | Backend connectivity, API responsiveness | HTTP 200 responses, response time < 5s |
+| **i18n Health** | Translation loading, no raw keys visible | No "nav.home" text, proper locale content |
+| **Accessibility Health** | Critical roles present, keyboard navigation | Navigation has role, buttons focusable |
+
+### Guardian Implementation
+
+Guardians follow **full CDAT architecture**:
+
+```typescript
+// _health/components.ts - Health check locators
+export class HealthComponents {
+  readonly mainNavigation: Locator;
+  readonly errorBanner: Locator;
+  
+  constructor(private page: Page) {
+    // ARIA-first locators only
+    this.mainNavigation = page.getByRole('navigation');
+    this.errorBanner = page.getByTestId('error-banner');
+  }
+}
+
+// _health/actions.ts - Health validation logic  
+export class HealthActions {
+  async checkBackendHealth(): Promise<boolean> {
+    const response = await this.page.goto('/api/health');
+    return response.ok();
+  }
+}
+
+// _health/test.ts - Pre-flight validation
+test('Environment is healthy before feature tests', async () => {
+  const isHealthy = await healthActions.checkBackendHealth();
+  expect(isHealthy).toBe(true);
+});
+```
+
+### Updated Layer Responsibilities
+
+| Layer | Core CDAT | With Cross-Cutting Guardians |
+|-------|-----------|-------------------------------|
+| **Components** | Feature locators | Feature locators + health check locators |
+| **Data** | Feature types & test data | Feature data + health thresholds |
+| **Actions** | Feature business logic | Feature logic + health validation |
+| **Tests** | Feature scenarios | Feature tests + pre-flight checks |
+
+**Key Principle:** Guardians extend CDAT but don't break the dependency rules or Zero Rules.
+
+[**Full Guardian Documentation →**](./CROSS-CUTTING-GUARDIANS.md)
+
+---
+
 ## Best Practices
 
 1. **Keep layers pure** - don't mix responsibilities

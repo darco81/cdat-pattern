@@ -5,6 +5,51 @@ All notable changes to CDAT Pattern will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-05-25
+
+### Added
+
+- **Cross-Cutting Guardians** - Major extension for environment health, i18n, and accessibility
+  - Guardian Pattern: Full CDAT modules for cross-cutting concerns
+  - Pre-flight validation: Health checks run before feature tests
+  - ARIA-First Locator Policy: Never locate by translated text, always by ARIA role or data-testid
+  - `_health` guardian module with complete C-D-A-T implementation
+
+- **Guardian Implementation (_health module)**
+  - Environment health validation (backend connectivity, response times)
+  - i18n health checks (translation loading, raw key detection)
+  - Accessibility validation (ARIA roles, keyboard navigation, accessible names)
+  - Comprehensive health reporting with detailed failure context
+
+- **Updated Architecture**
+  - Extended 4-layer responsibility table to include Guardian concerns
+  - Playwright project dependencies configuration for pre-flight checks
+  - Guardian-aware test execution flow (health-check → features)
+  
+- **Enhanced Documentation**
+  - New `CROSS-CUTTING-GUARDIANS.md` comprehensive guide
+  - Updated `ARCHITECTURE.md` with Guardian patterns and Mermaid diagrams
+  - Locator policy migration guide (text → ARIA/testid)
+  - Guardian benefits and implementation examples
+
+- **Example Updates**
+  - `examples/basic/_health/` complete Guardian implementation
+  - Updated Playwright config with project dependencies
+  - Enhanced README with Guardian pattern explanation
+  - New npm scripts for health-specific test runs
+
+### Changed
+
+- **Comparison Table**: Added cross-cutting concerns row (Classic POM vs CDAT Pattern)
+- **Documentation Links**: Added Cross-Cutting Guardians to main documentation list
+- **Layer Responsibilities**: Extended to include Guardian module responsibilities
+
+### Migration Notes
+
+- Existing CDAT implementations continue to work unchanged
+- Guardian modules are optional but recommended for production applications
+- Text-based locators should be migrated to ARIA-first approach for better i18n compatibility
+
 ## [1.1.0] - 2026-01-12
 
 ### Added

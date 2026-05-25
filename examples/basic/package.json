@@ -8,6 +8,8 @@
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
+    "test:health": "playwright test --project=health-check",
+    "test:features": "playwright test --project=chromium-features",
     "report": "playwright show-report",
     "lint": "eslint features --ext .ts",
     "typecheck": "tsc --noEmit"
